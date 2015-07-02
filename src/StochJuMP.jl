@@ -99,7 +99,9 @@ function getProcIdxSet(numScens::Integer)
     end
     # Why don't we just take a round-and-robin?
     proc_idx_set = Int[];
-    for s = myrank:mysize:(numScens-1)
+    # DSP is further parallelized with mysize > numScens.
+    modrank = myrank % numScens;
+    for s = modrank:mysize:(numScens-1)
         push!(proc_idx_set, s+1);
     end
     return proc_idx_set;
