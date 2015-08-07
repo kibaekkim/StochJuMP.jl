@@ -1,3 +1,5 @@
+using StochJuMP
+
 function passMasterSolution(m::JuMP.Model)
     for ch in m.children
         ch.ext[:Stochastic].sol = m.colVal
