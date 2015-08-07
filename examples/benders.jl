@@ -1,4 +1,4 @@
-function passMasterSolution(m::Model)
+function passMasterSolution(m::JuMP.Model)
     for ch in m.children
         ch.ext[:Stochastic].sol = m.colVal
     end
@@ -6,7 +6,7 @@ end
 
 # Create sparse matrix A with all parent variables. Removes them from linear constraints afterwards.
 # Once created, should be able to do A*x, where x is the solution to the master problem.
-function createMasterMat(m::Model)
+function createMasterMat(m::JuMP.Model)
     stoch = getStochastic(m)
     parent = stoch.parent
     for (nrow,con) in enumerate(m.linconstr)
@@ -24,7 +24,7 @@ function createMasterMat(m::Model)
     stoch.parentMat = sparse(I,J,V,length(m.linconstr),parent.numCols)
 end
 
-function prepProblemBounds(m::Model)
+function prepProblemBounds(m::JuMP.Model)
 
     objaff::AffExpr = m.obj.aff
         
@@ -58,7 +58,7 @@ function prepProblemBounds(m::Model)
 end
 
 # Solve stochastic LP with Bender's decomposition
-function solveStochastic(m::Model)
+function solveStochastic(m::JuMP.Model)
     stoch = getStochastic(m)
     @assert stoch.parent == nothing # make sure we're at the master problem
 
